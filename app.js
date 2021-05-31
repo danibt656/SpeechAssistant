@@ -6,6 +6,10 @@ const asistente = 'OFELIA';
  *  Respuestas preprogramadas
  */
 const noEntiendo = 'Lo siento, no te he entendido';
+const holas = [
+  '¡Hola!',
+  '¡Hola!, ¿qué tal estás?'
+]
 const greetings = [
   'Estoy muy bien, gracias por preguntar', 
   'Yo estoy bien si tú estás bien',
@@ -79,7 +83,7 @@ function evaluateRequest(msg) {
     answer = greetings[Math.floor(Math.random()*greetings.length)];
   }
   if(msgCase.includes('HOLA')) {
-    answer = 'Hola!';
+    answer = holas[Math.floor(Math.random()*holas.length)];
   }
   // Tiempo
   if(msgCase.includes('TIEMPO')){
@@ -91,7 +95,8 @@ function evaluateRequest(msg) {
     answer = horaToSpeech(fechaActual);
   }
   // Fecha
-  if(msgCase.includes('FECHA') || msgCase.includes('QUÉ DÍA ES')){
+  if(msgCase.includes('FECHA') || msgCase.includes('QUÉ DÍA ES')
+     || msgCase.includes('QUÉ DÍA ESTAMOS')){
     const fechaActual = new Date();
     answer = fechaToSpeech(fechaActual);
   }
