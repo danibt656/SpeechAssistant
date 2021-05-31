@@ -12,6 +12,7 @@ const tiempo = [
   'El tiempo está bien.',
   'Necesitas un bronceado.'
 ];
+const facha = 'Esta es una familia decente. Aquí se vota a Vox y se va a misa los domingos. Así que ya te puedes ir yendo a tomar por el culo, rojo. ¡Viva España!'
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
@@ -39,13 +40,13 @@ function readOutLoud(msg) {
   const speech = new SpeechSynthesisUtterance();
   let answer = '';
 
-  if(msg.includes('Pepa')){
-    answer = valuateRequest(msg);
+  if(msg.includes('Alexa')){
+    answer = evaluateRequest(msg);
   }else{
     answer = noEntiendo;
   }
 
-  speech.volume = 1;
+  speech.volume = 0.6;
   speech.rate = 1;
   speech.pitch = 1;
   speech.text = answer;    // What to say
@@ -55,10 +56,20 @@ function readOutLoud(msg) {
 
 function evaluateRequest(msg) {
   let answer = '';
-  if(msg.includes('cómo estás')) {
+  const msgCase = msg.toUpperCase();
+  // Saludos
+  if(msgCase.includes('CÓMO ESTÁS') ||
+     msgCase.includes('QUÉ TAL')) {
     answer = greetings[Math.floor(Math.random()*greetings.length)];
   }
-
+  // Tiempo
+  if(msgCase.includes('TIEMPO')){
+    answer = tiempo[Math.floor(Math.random()*tiempo.length)];
+  }
+  // Facha
+  if(msgCase.includes('LA SEXTA') || msgCase.includes('LASEXTA')){
+    answer = facha;  
+  }  
   return answer;
 }
 
