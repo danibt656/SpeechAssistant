@@ -78,6 +78,9 @@ function evaluateRequest(msg) {
      msgCase.includes('QUÉ TAL')) {
     answer = greetings[Math.floor(Math.random()*greetings.length)];
   }
+  if(msgCase.includes('HOLA')) {
+    answer = 'Hola!';
+  }
   // Tiempo
   if(msgCase.includes('TIEMPO')){
     answer = tiempo[Math.floor(Math.random()*tiempo.length)];
@@ -85,8 +88,14 @@ function evaluateRequest(msg) {
   // Hora
   if(msgCase.includes('HORA')){
     const fechaActual = new Date();
+    answer = horaToSpeech(fechaActual);
+  }
+  // Fecha
+  if(msgCase.includes('FECHA') || msgCase.includes('QUÉ DÍA ES')){
+    const fechaActual = new Date();
     answer = fechaToSpeech(fechaActual);
   }
+
   // Facha
   if(msgCase.includes('LA SEXTA') || msgCase.includes('LASEXTA')){
     answer = facha;  
@@ -98,9 +107,9 @@ function evaluateRequest(msg) {
 }
 
 /**
- *  Recita una fecha dada en lenguaje natural
+ *  Recita una hora dada en lenguaje natural
  */
-function fechaToSpeech(date){
+function horaToSpeech(date){
   let hora = date.getHours();
   let ret='';
   const mins = date.getMinutes();
@@ -125,6 +134,19 @@ function fechaToSpeech(date){
   return ret;
 }
 
+/**
+ *  Recita una fecha dada en lenguaje natural
+ */
+function fechaToSpeech(date) {
+  const meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+  const diasSemana = new Array("Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado");
+  const f=date;
+  const intros = ['Hoy estamos a ', 'Hoy es '];
+  const intro = intros[Math.floor(Math.random()*intros.length)];
+  const ret = intro+diasSemana[f.getDay()] + ", " + f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear();
+  console.log(ret);
+  return ret;
+}
 
 
 
