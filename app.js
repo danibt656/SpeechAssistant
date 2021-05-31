@@ -8,12 +8,11 @@ const asistente = 'OFELIA';
 const noEntiendo = 'Lo siento, no te he entendido';
 const greetings = [
   'Estoy muy bien, gracias por preguntar', 
-  'No en mi mejor momento, pero vamos tirando', 
+  'Yo estoy bien si tú estás bien',
   '¡Muy bien! ¿Y tú cómo estás?'
 ];
 const tiempo = [
   'El tiempo está bien.',
-  'Necesitas un bronceado.'
 ];
 const facha = 'Esta es una familia decente. Aquí se vota a Vox y se va a misa los domingos, así que ya te puedes ir yendo a tomar por culo, rojo. ¡Viva España!'
 
@@ -91,7 +90,7 @@ function evaluateRequest(msg) {
   // Facha
   if(msgCase.includes('LA SEXTA') || msgCase.includes('LASEXTA')){
     answer = facha;  
-    himno = new Audio('himno_esp.mp3');
+    himno = new Audio('resources/himno_esp.mp3');
     himno.volume = 0.5;
     setTimeout(()=>{ himno.play(); }, 13000);
   }  
