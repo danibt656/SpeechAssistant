@@ -1,6 +1,6 @@
 const btn = document.querySelector('.talk');
 const content = document.querySelector('.content');
-const asistente = 'SAM';
+const asistente = 'ALEXA';
 
 /**
  *  Respuestas preprogramadas
@@ -96,8 +96,14 @@ async function evaluateRequest(msg) {
   // Fecha
   if(msgCase.includes('FECHA') || msgCase.includes('QUÉ DÍA ES')
      || msgCase.includes('QUÉ DÍA ESTAMOS')){
-    const fechaActual = new Date();
-    answer = fechaToSpeech(fechaActual);
+    if(msgCase.includes('MAÑANA')) {
+      const fecha = new Date;
+      const manana = new Date(fecha); manana.setDate(manana.getDate()+1);
+      answer = fechaToSpeech(manana, 'Mañana');
+    }else{
+      const fecha = new Date();
+      answer = fechaToSpeech(fecha, 'Hoy');
+    }
   }
 
   // Facha
@@ -141,11 +147,11 @@ function horaToSpeech(date){
 /**
  *  Recita una fecha dada en lenguaje natural
  */
-function fechaToSpeech(date) {
+function fechaToSpeech(date, time) {
   const meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
   const diasSemana = new Array("Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado");
   const f=date;
-  const intros = ['Hoy estamos a ', 'Hoy es '];
+  const intros = [time+' es '];
   const intro = intros[Math.floor(Math.random()*intros.length)];
   const ret = intro+diasSemana[f.getDay()] + ", " + f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear();
   console.log(ret);
