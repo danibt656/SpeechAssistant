@@ -1,6 +1,6 @@
 const btn = document.querySelector('.talk');
 const content = document.querySelector('.content');
-const asistente = 'OFELIA';
+const asistente = 'SAM';
 
 /**
  *  Respuestas preprogramadas
@@ -15,9 +15,7 @@ const greetings = [
   'Yo estoy bien si tú estás bien',
   '¡Muy bien! ¿Y tú cómo estás?'
 ];
-const tiempo = [
-  'El tiempo está bien.',
-];
+
 const facha = 'Esta es una familia decente. Aquí se vota a Vox y se va a misa los domingos, así que ya te puedes ir yendo a tomar por culo, rojo. ¡Viva España!'
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -53,12 +51,12 @@ btn.addEventListener('click', ()=>{
 /**
  *  Responder a los comandos de voz del usuario
  */
-function readOutLoud(msg) {
+async function readOutLoud(msg) {
   const speech = new SpeechSynthesisUtterance();
   let answer = '';
 
   if(msg.toUpperCase().includes(asistente)){
-    answer = evaluateRequest(msg);
+    answer = await evaluateRequest(msg);
   }else{
     answer = noEntiendo;
   }
@@ -74,7 +72,7 @@ function readOutLoud(msg) {
 /**
  *  Evalua la respuesta en funcion del comando de voz del usuario
  */
-function evaluateRequest(msg) {
+async function evaluateRequest(msg) {
   let answer = '';
   const msgCase = msg.toUpperCase();
   // Saludos
@@ -86,8 +84,9 @@ function evaluateRequest(msg) {
     answer = holas[Math.floor(Math.random()*holas.length)];
   }
   // Tiempo
-  if(msgCase.includes('TIEMPO')){
-    answer = tiempo[Math.floor(Math.random()*tiempo.length)];
+  if(msgCase.includes('TIEMPO EN') || msgCase.includes('TIEMPO HACE EN')
+     || msgCase.includes('TEMPERATURA EN') || msgCase.includes('TIEMPO QUE HACE EN')){
+    answer = await getCurrentWeather(msgCase);
   }
   // Hora
   if(msgCase.includes('HORA')){
@@ -152,6 +151,28 @@ function fechaToSpeech(date) {
   console.log(ret);
   return ret;
 }
+
+/**
+ * Pide el tiempo a la API de openWeather
+ */
+async function getCurrentWeather(msgCase) {
+  var input = msgCase.slice(msgCase.indexOf('EN') + 'EN'.length)
+                     .replace(/[.,\/#!$%\^&\*;:{}?¿¡!=\-_`~()]/g,"");
+  const myKey = "d9eabd7a98b614cff8a11b7e4b2ba540";
+  console.log(input);
+  // Pedir ciudad a API del tiempo
+  const response = await fetch(
+  `https://api.openweathermap.org/data/2.5/weather?q=${input}&appid=${myKey}`);
+  const data = await response.json();
+  // Devolver el tiempo como cadena de caracteres
+  const temperature=Math.floor(data.main.temp - 273); // Temperatura en Kelvin - 273 (ºC)
+  const humidity = data.main.humidity;
+  let rt='Hoy la temperatura en '+input+' es de unos '+temperature+' grados, con una humedad del '+
+    humidity+' por ciento.';
+  return rt;
+}
+
+
 
 
 
