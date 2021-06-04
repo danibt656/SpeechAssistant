@@ -47,6 +47,13 @@ btn.addEventListener('click', ()=>{
   recognition.start();
 });
 
+// event = keyup or keydown
+document.addEventListener('keyup', event => {
+  if (event.code === 'Space') {
+    recognition.start();
+  }
+})
+
 
 /**
  *  Responder a los comandos de voz del usuario
