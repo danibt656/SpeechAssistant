@@ -1,6 +1,7 @@
 const btn = document.querySelector('.talk');
 const content = document.querySelector('.content');
 const asistente = 'ALEXA';
+const puppeteer = require('puppeteer');
 
 /**
  *  Respuestas preprogramadas
@@ -15,8 +16,6 @@ const greetings = [
   'Yo estoy bien si tú estás bien',
   '¡Muy bien! ¿Y tú cómo estás?'
 ];
-
-const facha = 'Esta es una familia decente. Aquí se vota a Vox y se va a misa los domingos, así que ya te puedes ir yendo a tomar por culo, rojo. ¡Viva España!'
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
@@ -112,14 +111,11 @@ async function evaluateRequest(msg) {
       answer = fechaToSpeech(fecha, 'Hoy');
     }
   }
-
-  // Facha
-  if(msgCase.includes('LA SEXTA') || msgCase.includes('LASEXTA')){
-    answer = facha;  
-    himno = new Audio('resources/himno_esp.mp3');
-    himno.volume = 0.5;
-    setTimeout(()=>{ himno.play(); }, 13000);
-  }  
+  // Hora
+  if(msgCase.includes('PROYECTO DE JAVASCRIPT')){
+    example();
+  }
+  
   return answer;
 }
 
@@ -183,6 +179,13 @@ async function getCurrentWeather(msgCase) {
   let rt='Hoy la temperatura en '+input+' es de unos '+temperature+' grados, con una humedad del '+
     humidity+' por ciento.';
   return rt;
+}
+
+
+async function example(){
+  let driver = await new Builder().forBrowser("edge").build();
+  await driver.get("http://google.com");
+  await driver.findElement(By.name('q')).sendKeys("Selenium", Key.RETURN);
 }
 
 
