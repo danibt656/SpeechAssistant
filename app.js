@@ -1,7 +1,6 @@
 const btn = document.querySelector('.talk');
 const content = document.querySelector('.content');
 const asistente = 'ALEXA';
-const puppeteer = require('puppeteer');
 
 /**
  *  Respuestas preprogramadas
@@ -16,7 +15,7 @@ const greetings = [
   'Yo estoy bien si tú estás bien',
   '¡Muy bien! ¿Y tú cómo estás?'
 ];
-
+let study=null;
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
 recognition.lang = "es-ES";   // Idioma Español de España
@@ -115,7 +114,27 @@ async function evaluateRequest(msg) {
   if(msgCase.includes('PROYECTO DE JAVASCRIPT')){
     example();
   }
-  
+  // Musica de estudio 
+  if(msgCase.includes('MÚSICA DE ESTUDIO') || msgCase.includes('MÚSICA PARA CONCENTRARSE')
+     || msgCase.includes('MÚSICA PARA ESTUDIAR')){
+    answer='';
+    if(study!=null){
+      study.pause();
+      study=null;
+    }
+    study = new Audio('resources/study.mp3');
+    study.volume = 0.5;
+    study.play();
+  }
+  // Parar musica
+  if(msgCase.includes('PARA LA MÚSICA') || msgCase.includes('DETÉN LA MÚSICA')
+     || msgCase.includes('QUITA LA MÚSICA')){
+    if(study!=null){
+      study.pause();
+      study=null;
+    }
+  }
+
   return answer;
 }
 
@@ -181,12 +200,6 @@ async function getCurrentWeather(msgCase) {
   return rt;
 }
 
-
-async function example(){
-  let driver = await new Builder().forBrowser("edge").build();
-  await driver.get("http://google.com");
-  await driver.findElement(By.name('q')).sendKeys("Selenium", Key.RETURN);
-}
 
 
 
